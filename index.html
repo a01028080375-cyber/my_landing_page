@@ -53,10 +53,10 @@
       display: block;
     }
 
-    /* 사진 없을 때 이니셜 표시 */
+    /* 사진 없을 때 만년필 촉 표시 */
     .profile-wrap .initials {
-      font-size: 2rem;
-      font-weight: 700;
+      width: 54px;
+      height: 54px;
       color: #1F3864;
       line-height: 1;
     }
@@ -220,9 +220,18 @@
       <img
         src="profile.jpg"
         alt="민광엽 프로필 사진"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
       >
-      <span class="initials" style="display:none;">민</span>
+      <svg class="initials" style="display:none;" viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg">
+        <!-- 만년필 촉 몸체 -->
+        <path d="M30 84 C22 62 6 44 10 22 Q30 6 50 22 C54 44 38 62 30 84Z" fill="#1F3864"/>
+        <!-- 왼쪽 하이라이트 -->
+        <path d="M30 84 C22 62 6 44 10 22 Q20 10 30 8 C20 18 8 38 30 84Z" fill="rgba(255,255,255,0.18)"/>
+        <!-- 중앙 슬릿(홈) -->
+        <line x1="30" y1="84" x2="30" y2="40" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- 통기공 -->
+        <circle cx="30" cy="37" r="4" fill="white"/>
+      </svg>
     </div>
     <p class="name-line">
       <span class="name">민광엽</span>
