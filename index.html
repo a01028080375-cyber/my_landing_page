@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>민광엽 · AI 컨설턴트</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background: rgba(31, 56, 100, 0.07);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(31, 56, 100, 0.14);
+      min-height: 100vh;
+    }
+
+    /* ── 헤더 ── */
+    header {
+      background: #1F3864;
+      color: #fff;
+      padding: 40px 24px 36px;
+      text-align: center;
+    }
+
+    /* 원형 프로필 */
+    .profile-wrap {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      overflow: hidden;
+      margin: 0 auto 20px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 사진 없을 때 이니셜 표시 */
+    .profile-wrap .initials {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1F3864;
+      line-height: 1;
+    }
+
+    /* 이름·직책 한 줄 */
+    .name-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .name-line .name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .name-line .divider {
+      width: 1px;
+      height: 1.2rem;
+      background: rgba(255, 255, 255, 0.5);
+      display: inline-block;
+    }
+
+    .name-line .job-title {
+      font-size: 0.9rem;
+      font-weight: 400;
+      opacity: 0.85;
+      letter-spacing: 0.2px;
+    }
+
+    /* ── 자기소개 ── */
+    .bio {
+      padding: 28px 24px;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.12);
+    }
+
+    .bio p {
+      font-size: 0.97rem;
+      line-height: 1.8;
+      color: #333;
+    }
+
+    /* ── 경력 섹션 ── */
+    .section-label {
+      padding: 24px 24px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #1F3864;
+    }
+
+    .career-list {
+      padding: 0 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .career-card {
+      border: 1px solid rgba(31, 56, 100, 0.18);
+      border-left: 4px solid #1F3864;
+      border-radius: 6px;
+      padding: 14px 16px;
+      background: #fff;
+    }
+
+    .career-year {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #1F3864;
+      margin-bottom: 3px;
+      letter-spacing: 0.3px;
+    }
+
+    .career-role {
+      font-size: 0.97rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 1px;
+    }
+
+    .career-org {
+      font-size: 0.85rem;
+      color: #333;
+      opacity: 0.65;
+      margin-bottom: 5px;
+    }
+
+    .career-desc {
+      font-size: 0.83rem;
+      color: #333;
+      line-height: 1.55;
+    }
+
+    /* ── 액션 버튼 ── */
+    .actions {
+      padding: 28px 24px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-fill {
+      background: #1F3864;
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: #1F3864;
+      border: 2px solid #1F3864;
+    }
+
+    /* ── 토스트 알림 ── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: #333;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 22px;
+      font-size: 0.85rem;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+  <!-- 헤더: 프로필 + 이름·직책 -->
+  <header>
+    <div class="profile-wrap">
+      <img
+        src="profile.jpg"
+        alt="민광엽 프로필 사진"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <span class="initials" style="display:none;">민</span>
+    </div>
+    <p class="name-line">
+      <span class="name">민광엽</span>
+      <span class="divider"></span>
+      <span class="job-title">AI 컨설턴트</span>
+    </p>
+  </header>
+
+  <!-- 자기소개 -->
+  <section class="bio">
+    <p>
+      금융권에서 25년간 일했습니다.<br>
+      AI 컨설팅을 통해 제 경험을 나누어 드리겠습니다.
+    </p>
+  </section>
+
+  <!-- 경력 카드 -->
+  <p class="section-label">경력</p>
+  <div class="career-list">
+
+    <div class="career-card">
+      <p class="career-year">2026~현재</p>
+      <p class="career-role">AI 컨설턴트</p>
+    </div>
+
+    <div class="career-card">
+      <p class="career-year">2024~2025</p>
+      <p class="career-role">AI 강사</p>
+    </div>
+
+    <div class="career-card">
+      <p class="career-year">~ 2023</p>
+      <p class="career-role">금융 전문가</p>
+    </div>
+
+  </div>
+
+  <!-- 학력 카드 -->
+  <p class="section-label">학력</p>
+  <div class="career-list">
+
+    <div class="career-card">
+      <p class="career-role">경영학 학사, 석사</p>
+    </div>
+
+  </div>
+
+  <!-- 액션 버튼 -->
+  <div class="actions">
+    <a class="btn btn-fill" href="mailto:a01028080375@gmail.com">이메일 보내기</a>
+    <button class="btn btn-outline" onclick="copyPhone()">전화 걸기 (번호 복사)</button>
+  </div>
+
+  </div><!-- /.container -->
+
+  <!-- 토스트 -->
+  <div id="toast">전화번호가 복사되었습니다</div>
+
+  <script>
+    function copyPhone() {
+      const phone = '010-1028-0375';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(phone).then(showToast).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+      function fallbackCopy() {
+        const el = document.createElement('textarea');
+        el.value = phone;
+        el.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+        document.body.appendChild(el);
+        el.focus(); el.select();
+        try { document.execCommand('copy'); } catch (_) {}
+        document.body.removeChild(el);
+        showToast();
+      }
+      function showToast() {
+        const t = document.getElementById('toast');
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+      }
+    }
+
+    /* 사진 로드 성공 시 이니셜 숨기기 */
+    const img = document.querySelector('.profile-wrap img');
+    img.addEventListener('load', () => {
+      img.style.display = 'block';
+      img.nextElementSibling.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>
